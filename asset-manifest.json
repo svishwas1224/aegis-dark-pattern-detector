@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/aegis-dark-pattern-detector/static/css/main.ebee097c.css",
+    "main.js": "/aegis-dark-pattern-detector/static/js/main.d99d713c.js",
+    "static/js/453.20359781.chunk.js": "/aegis-dark-pattern-detector/static/js/453.20359781.chunk.js",
+    "index.html": "/aegis-dark-pattern-detector/index.html",
+    "main.ebee097c.css.map": "/aegis-dark-pattern-detector/static/css/main.ebee097c.css.map",
+    "main.d99d713c.js.map": "/aegis-dark-pattern-detector/static/js/main.d99d713c.js.map",
+    "453.20359781.chunk.js.map": "/aegis-dark-pattern-detector/static/js/453.20359781.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ebee097c.css",
+    "static/js/main.d99d713c.js"
+  ]
+}
