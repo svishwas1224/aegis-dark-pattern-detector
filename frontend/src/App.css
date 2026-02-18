@@ -1,0 +1,193 @@
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ================= PREMIUM ANIMATED BACKGROUNDS ================= */
+
+.signup-bg {
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1c1c1c);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+.login-bg {
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #1e3c72, #2a5298, #6a11cb, #2575fc);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ================= NAVBAR ================= */
+
+nav {
+  background-color: #2c3e50;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: #f39c12;
+}
+
+/* ================= SIGNUP ================= */
+
+.signup-container {
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  padding: 40px;
+  border-radius: 15px;
+  width: 320px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.signup-card h1 {
+  margin-bottom: 20px;
+}
+
+/* Signup Inputs */
+.signup-card input,
+.signup-card select {
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+/* Hover Pink */
+.signup-card input:hover,
+.signup-card select:hover {
+  border: 2px solid #ff4b2b;
+  box-shadow: 0 0 8px #ff4b2b;
+}
+
+/* Focus Strong Pink */
+.signup-card input:focus,
+.signup-card select:focus {
+  border: 2px solid #ff416c;
+  box-shadow: 0 0 12px #ff416c;
+}
+
+.signup-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.signup-card button:hover {
+  transform: scale(1.05);
+}
+
+/* ================= LOGIN ================= */
+
+.login-container {
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(15px);
+  padding: 40px;
+  border-radius: 15px;
+  width: 320px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.login-card h1 {
+  margin-bottom: 20px;
+}
+
+/* Login Inputs */
+.login-card input {
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+/* Hover Blue */
+.login-card input:hover {
+  border: 2px solid #2575fc;
+  box-shadow: 0 0 8px #2575fc;
+}
+
+/* Focus Strong Blue */
+.login-card input:focus {
+  border: 2px solid #6a11cb;
+  box-shadow: 0 0 12px #6a11cb;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.login-card button:hover {
+  transform: scale(1.05);
+}
+
+/* Password Icon */
+.password-wrapper {
+  position: relative;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
