@@ -1,3 +1,4 @@
+import os
 from functools import wraps
 from flask import Flask, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -5,23 +6,31 @@ from pymongo import MongoClient
 import jwt
 import datetime
 from flask_cors import CORS
-from ml_detector import predict_text
+from ml.ml_detector import predict_text
+from dotenv import load_dotenv
+load_dotenv()
+
 
 app = Flask(__name__)
 CORS(app)
 
-# ---------------- SECRET KEY ----------------
-SECRET_KEY = "a3f9c2d8b7e4f1a9c0d3e2f7b8a9d4e1f2c3b4a5d6e7f8a9b0c1d2e3f4a5b6c7"
+# ---------------- ENV VARIABLES ----------------
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
+
+MONGO_URI = os.environ.get("MONGO_URI")
+
+if not MONGO_URI:
+    raise Exception("MONGO_URI not set in environment variables")
 
 # ---------------- DATABASE CONNECTION ----------------
-client = MongoClient("mongodb+srv://caniwait2005_db_user:Test12345@cluster0.gg4a0pz.mongodb.net/?appName=Cluster0")
+client = MongoClient(MONGO_URI)
 db = client["projectdb"]
 users_collection = db["users"]
 analysis_collection = db["analysis"]
 
 # ---------------- AUTH ROUTES ----------------
 
-@app.route("/auth/signup", methods=["POST"])
+@app.route("/auth/signup", methods=["GET","POST"])
 def signup():
     data = request.get_json()
     username = data.get("username")
@@ -52,6 +61,19 @@ def login():
     password = data.get("password")
 
     user = users_collection.find_one({"username": username})
+
+    print("----- LOGIN DEBUG -----")
+    print("Entered username:", username)
+    print("Entered password:", password)
+    print("User found in DB:", user)
+
+    if user:
+        print("Stored hashed password:", user["password"])
+        print("Password match result:",
+              check_password_hash(user["password"], password))
+    else:
+        print("User NOT found in database")
+
     if not user or not check_password_hash(user["password"], password):
         return jsonify({"message": "Invalid credentials"}), 401
 
@@ -61,14 +83,14 @@ def login():
         "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
     }, SECRET_KEY, algorithm="HS256")
 
-    if isinstance(token, bytes):
-        token = token.decode("utf-8")
-
     return jsonify({
         "message": "Login successful",
         "token": token,
         "role": user["role"]
     })
+
+
+
 
 # ---------------- TOKEN DECORATOR ----------------
 
@@ -78,7 +100,9 @@ def token_required(f):
         token = None
 
         if "Authorization" in request.headers:
-            token = request.headers["Authorization"].split(" ")[1]
+            parts = request.headers["Authorization"].split(" ")
+            if len(parts) == 2:
+                token = parts[1]
 
         if not token:
             return jsonify({"message": "Token is missing"}), 401
@@ -95,6 +119,7 @@ def token_required(f):
 
     return decorated
 
+
 # ---------------- ADMIN ROUTE ----------------
 
 @app.route("/admin/overview", methods=["GET"])
@@ -107,6 +132,7 @@ def admin_overview(current_user):
         "message": "Welcome Admin!",
         "data": "Sensitive overview data"
     })
+
 
 # ---------------- CLIENT DASHBOARD ----------------
 
@@ -126,6 +152,7 @@ def client_dashboard(current_user):
         "profile": user
     })
 
+
 # ---------------- ML ANALYSIS ROUTE ----------------
 
 @app.route("/analyze", methods=["POST"])
@@ -136,19 +163,26 @@ def analyze():
     if not text:
         return jsonify({"message": "Text is required"}), 400
 
-    result = predict_text(text)
+    try:
+        result = predict_text(text)
+    except Exception as e:
+        return jsonify({"message": f"Prediction failed: {str(e)}"}), 500
 
-    # Save to MongoDB
     analysis_collection.insert_one({
         "text": text,
-        "prediction": result["prediction"],
-        "confidence": result["confidence"],
+        "prediction": result.get("prediction"),
+        "confidence": result.get("confidence"),
         "timestamp": datetime.datetime.utcnow()
     })
 
     return jsonify(result)
 
+
 # ---------------- RUN APP ----------------
+@app.route("/")
+def home():
+    return jsonify({"message": "Aegis Backend Running"})
+
 
 if __name__ == "__main__":
-    app.run(debug=True,host="0.0.0.0", port=5000)
+    app.run(debug=True, host="0.0.0.0", port=5000)
